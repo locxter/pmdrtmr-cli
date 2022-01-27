@@ -1,0 +1,20 @@
+{
+  "name": "pmdrtmr-cli",
+  "version": "1.0.0",
+  "author": "locxter",
+  "description": "This is the CLI frontend of my Pomodoro timer project pmdrtmr, which I build during my work placement at the KDO.",
+  "license": "MIT",
+  "main": "main.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://gitweb.kdo.de/praktikum/pomodori-client-cli.git"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "figlet": "^1.5.2",
+    "formdata-node": "^4.3.2",
+    "inquirer": "^8.2.0",
+    "node-fetch": "^3.2.0"
+  }
+}
