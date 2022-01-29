@@ -2,7 +2,7 @@
 import chalk from 'chalk';
 import figlet from 'figlet';
 import inquirer from 'inquirer';
-import { retrieveAccessToken, signUp, revokeAccessToken, getAllTimersOfUser, createTimer, deleteTimer, getUser, updateUser, getCaldavDescriptions, deleteUser } from 'lib/api-controller.js';
+import { retrieveAccessToken, signUp, revokeAccessToken, getAllTimersOfUser, createTimer, deleteTimer, getUser, updateUser, getCaldavDescriptions, deleteUser } from './lib/api-controller.js';
 
 // Activating strict mode
 'use strict';
