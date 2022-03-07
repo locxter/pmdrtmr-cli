@@ -1,4 +1,4 @@
-# pmdrtmr-cli
+# pmdrtmr CLI
 
 ## Overview
 
