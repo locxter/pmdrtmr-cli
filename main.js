@@ -5,7 +5,7 @@ import figlet from 'figlet';
 import inquirer from 'inquirer';
 import { retrieveAccessToken, signUp, revokeAccessToken, getAllTimersOfUser, createTimer, deleteTimer, getUser, updateUser, getCaldavDescriptions, deleteUser } from './lib/api-controller.js';
 
-// Defining variables for global stuff
+// Variables for global stuff
 let ACCESS_TOKEN;
 let SERVER_ADDRESS;
 let timers;
