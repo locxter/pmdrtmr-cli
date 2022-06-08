@@ -6,8 +6,8 @@ import inquirer from 'inquirer';
 import { retrieveAccessToken, signUp, revokeAccessToken, getAllTimersOfUser, createTimer, deleteTimer, getUser, updateUser, getCaldavDescriptions, deleteUser } from './lib/api-controller.js';
 
 // Variables for global stuff
-let ACCESS_TOKEN;
-let SERVER_ADDRESS;
+let globalAccessToken;
+let globalServerAddress;
 let timers;
 let timer;
 let countdownTimeLeft;
@@ -67,8 +67,8 @@ function SignUpOrLogin() {
             let serverAddress = data.serverAddress;
             retrieveAccessToken(serverAddress, user)
                 .then(data => {
-                    ACCESS_TOKEN = data;
-                    SERVER_ADDRESS = serverAddress;
+                    globalAccessToken = data;
+                    globalServerAddress = serverAddress;
                     menu();
                 })
                 .catch(error => {
@@ -78,8 +78,8 @@ function SignUpOrLogin() {
                             return retrieveAccessToken(serverAddress, user);
                         })
                         .then(data => {
-                            ACCESS_TOKEN = data;
-                            SERVER_ADDRESS = serverAddress;
+                            globalAccessToken = data;
+                            globalServerAddress = serverAddress;
                             menu();
                         })
                         .catch(error => {
@@ -163,7 +163,7 @@ function menu() {
 // Function to show the timer list
 function showTimers() {
     console.clear();
-    getAllTimersOfUser(SERVER_ADDRESS, ACCESS_TOKEN)
+    getAllTimersOfUser(globalServerAddress, globalAccessToken)
         .then(data => {
             if (data.length < 2) {
                 console.log(chalk.bold('No timers found'));
@@ -220,7 +220,7 @@ function showTimers() {
 // Function to add a CalDAV task to the timer list
 function addCaldavTask() {
     console.clear();
-    getCaldavDescriptions(SERVER_ADDRESS, ACCESS_TOKEN)
+    getCaldavDescriptions(globalServerAddress, globalAccessToken)
         .then(data => {
             if (data.length < 1) {
                 console.log(chalk.bold('No CalDAV tasks found'));
@@ -270,7 +270,7 @@ function addCaldavTask() {
                         let timer = {
                             description: data.caldavTask
                         };
-                        return createTimer(SERVER_ADDRESS, ACCESS_TOKEN, timer);
+                        return createTimer(globalServerAddress, globalAccessToken, timer);
                     })
                     .then(() => {
                         return inquirer.prompt({
@@ -345,7 +345,7 @@ function addTask() {
             let timer = {
                 description: data.task
             };
-            return createTimer(SERVER_ADDRESS, ACCESS_TOKEN, timer);
+            return createTimer(globalServerAddress, globalAccessToken, timer);
         })
         .then(() => {
             return inquirer.prompt({
@@ -396,7 +396,7 @@ function addTask() {
 // Function to delete a task from the timer list
 function deleteTask() {
     console.clear();
-    getAllTimersOfUser(SERVER_ADDRESS, ACCESS_TOKEN)
+    getAllTimersOfUser(globalServerAddress, globalAccessToken)
         .then(data => {
             let tasksAvailable = [];
             for (let timer of data) {
@@ -452,7 +452,7 @@ function deleteTask() {
                     choices: tasksAvailable
                 })
                     .then(data => {
-                        return deleteTimer(SERVER_ADDRESS, ACCESS_TOKEN, data.taskToDelete);
+                        return deleteTimer(globalServerAddress, globalAccessToken, data.taskToDelete);
                     })
                     .then(() => {
                         return inquirer.prompt({
@@ -508,7 +508,7 @@ function deleteTask() {
 // Function for running a timer
 function runTimer(index) {
     console.clear();
-    getAllTimersOfUser(SERVER_ADDRESS, ACCESS_TOKEN)
+    getAllTimersOfUser(globalServerAddress, globalAccessToken)
         .then(data => {
             if (data.length < 2) {
                 console.log(chalk.bold('No timers found'));
@@ -674,7 +674,7 @@ function runTimer(index) {
                     if (countdownTimeLeft === 0) {
                         clearInterval(countdownInterval);
                         if (timer.isBreak) {
-                            deleteTimer(SERVER_ADDRESS, ACCESS_TOKEN, timers[0].id)
+                            deleteTimer(globalServerAddress, globalAccessToken, timers[0].id)
                                 .then(() => {
                                     runTimer(0);
                                 })
@@ -873,7 +873,7 @@ function toggleIsPaused() {
             if (countdownTimeLeft === 0) {
                 clearInterval(countdownInterval);
                 if (timer.isBreak) {
-                    deleteTimer(SERVER_ADDRESS, ACCESS_TOKEN, timers[0].id)
+                    deleteTimer(globalServerAddress, globalAccessToken, timers[0].id)
                         .then(() => {
                             runTimer(0);
                         })
@@ -891,7 +891,7 @@ function toggleIsPaused() {
 // Function to change user settings and delete an account
 function settings() {
     console.clear();
-    getUser(SERVER_ADDRESS, ACCESS_TOKEN)
+    getUser(globalServerAddress, globalAccessToken)
         .then(data => {
             console.log(chalk.bold('Remember to always enter a password even though you may not want to change it, as the settings ') + chalk.bold.inverse('will not be saved') + chalk.bold(' otherwise!'));
             return inquirer.prompt([
@@ -994,17 +994,17 @@ function settings() {
         })
         .then(data => {
             if (data.delete && data.deleteConfirmation) {
-                deleteUser(SERVER_ADDRESS, ACCESS_TOKEN)
+                deleteUser(globalServerAddress, globalAccessToken)
                     .then(() => {
                         console.clear();
-                        ACCESS_TOKEN = null;
-                        SERVER_ADDRESS = null;
+                        globalAccessToken = null;
+                        globalServerAddress = null;
                     })
                     .catch(error => {
                         alert(error);
                     });
             } else {
-                updateUser(SERVER_ADDRESS, ACCESS_TOKEN, data)
+                updateUser(globalServerAddress, globalAccessToken, data)
                     .then(() => {
                         return inquirer.prompt({
                             type: 'list',
@@ -1045,10 +1045,10 @@ function settings() {
 // Function to log out of the current session
 function logOut() {
     console.clear();
-    revokeAccessToken(SERVER_ADDRESS, ACCESS_TOKEN)
+    revokeAccessToken(globalServerAddress, globalAccessToken)
         .then(() => {
-            ACCESS_TOKEN = null;
-            SERVER_ADDRESS = null;
+            globalAccessToken = null;
+            globalServerAddress = null;
         })
         .catch(error => {
             console.error(error);
