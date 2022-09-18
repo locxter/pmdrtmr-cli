@@ -25,7 +25,7 @@ function SignUpOrLogin() {
             type: 'input',
             name: 'username',
             message: 'Username:',
-            validate: value => {
+            validate: (value) => {
                 if (value) {
                     return true;
                 } else {
@@ -37,7 +37,7 @@ function SignUpOrLogin() {
             type: 'password',
             name: 'password',
             message: 'Password:',
-            validate: value => {
+            validate: (value) => {
                 if (value) {
                     return true;
                 } else {
@@ -50,7 +50,7 @@ function SignUpOrLogin() {
             name: 'serverAddress',
             message: 'Server address:',
             default: 'http://localhost:8080',
-            validate: value => {
+            validate: (value) => {
                 if (value) {
                     return true;
                 } else {
@@ -59,35 +59,35 @@ function SignUpOrLogin() {
             }
         }
     ])
-        .then(data => {
+        .then((data) => {
             let user = {
                 username: data.username,
                 password: data.password
             };
             let serverAddress = data.serverAddress;
             retrieveAccessToken(serverAddress, user)
-                .then(data => {
+                .then((data) => {
                     globalAccessToken = data;
                     globalServerAddress = serverAddress;
                     menu();
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error(error);
                     signUp(serverAddress, user)
                         .then(() => {
                             return retrieveAccessToken(serverAddress, user);
                         })
-                        .then(data => {
+                        .then((data) => {
                             globalAccessToken = data;
                             globalServerAddress = serverAddress;
                             menu();
                         })
-                        .catch(error => {
+                        .catch((error) => {
                             console.error(error);
                         });
                 });
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -130,7 +130,7 @@ function menu() {
             }
         ]
     })
-        .then(data => {
+        .then((data) => {
             switch (data.option) {
                 case 0:
                     showTimers();
@@ -155,7 +155,7 @@ function menu() {
                     break;
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -164,7 +164,7 @@ function menu() {
 function showTimers() {
     console.clear();
     getAllTimersOfUser(globalServerAddress, globalAccessToken)
-        .then(data => {
+        .then((data) => {
             if (data.length < 2) {
                 console.log(chalk.bold('No timers found'));
             } else {
@@ -199,7 +199,7 @@ function showTimers() {
                 ]
             });
         })
-        .then(data => {
+        .then((data) => {
             switch (data.option) {
                 case 0:
                     menu();
@@ -212,7 +212,7 @@ function showTimers() {
                     break;
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -221,7 +221,7 @@ function showTimers() {
 function addCaldavTask() {
     console.clear();
     getCaldavDescriptions(globalServerAddress, globalAccessToken)
-        .then(data => {
+        .then((data) => {
             if (data.length < 1) {
                 console.log(chalk.bold('No CalDAV tasks found'));
                 inquirer.prompt({
@@ -243,7 +243,7 @@ function addCaldavTask() {
                         }
                     ]
                 })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 menu();
@@ -256,7 +256,7 @@ function addCaldavTask() {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             } else {
@@ -266,7 +266,7 @@ function addCaldavTask() {
                     message: 'Choose a CalDAV task to add:',
                     choices: data
                 })
-                    .then(data => {
+                    .then((data) => {
                         let timer = {
                             description: data.caldavTask
                         };
@@ -297,7 +297,7 @@ function addCaldavTask() {
                             ]
                         });
                     })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 addCaldavTask();
@@ -313,12 +313,12 @@ function addCaldavTask() {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
             setTimeout(() => {
                 menu();
@@ -333,7 +333,7 @@ function addTask() {
         type: 'input',
         name: 'task',
         message: 'Task:',
-        validate: value => {
+        validate: (value) => {
             if (value) {
                 return true;
             } else {
@@ -341,7 +341,7 @@ function addTask() {
             }
         }
     })
-        .then(data => {
+        .then((data) => {
             let timer = {
                 description: data.task
             };
@@ -372,7 +372,7 @@ function addTask() {
                 ]
             });
         })
-        .then(data => {
+        .then((data) => {
             switch (data.option) {
                 case 0:
                     addTask();
@@ -388,7 +388,7 @@ function addTask() {
                     break;
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -397,7 +397,7 @@ function addTask() {
 function deleteTask() {
     console.clear();
     getAllTimersOfUser(globalServerAddress, globalAccessToken)
-        .then(data => {
+        .then((data) => {
             let tasksAvailable = [];
             for (let timer of data) {
                 if (!timer.isBreak) {
@@ -428,7 +428,7 @@ function deleteTask() {
                         }
                     ]
                 })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 menu();
@@ -441,7 +441,7 @@ function deleteTask() {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             } else {
@@ -451,7 +451,7 @@ function deleteTask() {
                     message: 'Choose a task to delete:',
                     choices: tasksAvailable
                 })
-                    .then(data => {
+                    .then((data) => {
                         return deleteTimer(globalServerAddress, globalAccessToken, data.taskToDelete);
                     })
                     .then(() => {
@@ -479,7 +479,7 @@ function deleteTask() {
                             ]
                         });
                     })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 deleteTask();
@@ -495,12 +495,12 @@ function deleteTask() {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -509,7 +509,7 @@ function deleteTask() {
 function runTimer(index) {
     console.clear();
     getAllTimersOfUser(globalServerAddress, globalAccessToken)
-        .then(data => {
+        .then((data) => {
             if (data.length < 2) {
                 console.log(chalk.bold('No timers found'));
                 inquirer.prompt({
@@ -531,7 +531,7 @@ function runTimer(index) {
                         }
                     ]
                 })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 menu();
@@ -544,7 +544,7 @@ function runTimer(index) {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             } else {
@@ -584,7 +584,7 @@ function runTimer(index) {
                         }
                     ]
                 });
-                countdownMenu.then(data => {
+                countdownMenu.then((data) => {
                     switch (data.option) {
                         case 0:
                             toggleIsPaused();
@@ -603,7 +603,7 @@ function runTimer(index) {
                             break;
                     }
                 })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
                 countdownInterval = setInterval(() => {
@@ -648,7 +648,7 @@ function runTimer(index) {
                         ]
                     });
                     countdownMenu
-                        .then(data => {
+                        .then((data) => {
                             switch (data.option) {
                                 case 0:
                                     toggleIsPaused();
@@ -667,7 +667,7 @@ function runTimer(index) {
                                     break;
                             }
                         })
-                        .catch(error => {
+                        .catch((error) => {
                             console.error(error);
                         });
                     countdownTimeLeft -= 2;
@@ -678,7 +678,7 @@ function runTimer(index) {
                                 .then(() => {
                                     runTimer(0);
                                 })
-                                .catch(error => {
+                                .catch((error) => {
                                     console.error(error);
                                 });
                         } else {
@@ -688,7 +688,7 @@ function runTimer(index) {
                 }, 2000);
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -729,7 +729,7 @@ function toggleIsPaused() {
                 }
             ]
         })
-            .then(data => {
+            .then((data) => {
                 switch (data.option) {
                     case 0:
                         toggleIsPaused();
@@ -745,7 +745,7 @@ function toggleIsPaused() {
                         break;
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
     } else {
@@ -783,7 +783,7 @@ function toggleIsPaused() {
             ]
         });
         countdownMenu
-            .then(data => {
+            .then((data) => {
                 switch (data.option) {
                     case 0:
                         toggleIsPaused();
@@ -802,7 +802,7 @@ function toggleIsPaused() {
                         break;
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
         countdownInterval = setInterval(() => {
@@ -847,7 +847,7 @@ function toggleIsPaused() {
                 ]
             });
             countdownMenu
-                .then(data => {
+                .then((data) => {
                     switch (data.option) {
                         case 0:
                             toggleIsPaused();
@@ -866,7 +866,7 @@ function toggleIsPaused() {
                             break;
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error(error);
                 });
             countdownTimeLeft -= 2;
@@ -877,7 +877,7 @@ function toggleIsPaused() {
                         .then(() => {
                             runTimer(0);
                         })
-                        .catch(error => {
+                        .catch((error) => {
                             console.error(error);
                         });
                 } else {
@@ -892,7 +892,7 @@ function toggleIsPaused() {
 function settings() {
     console.clear();
     getUser(globalServerAddress, globalAccessToken)
-        .then(data => {
+        .then((data) => {
             console.log(chalk.bold('Remember to always enter a password even though you may not want to change it, as the settings ') + chalk.bold.inverse('will not be saved') + chalk.bold(' otherwise!'));
             return inquirer.prompt([
                 {
@@ -900,7 +900,7 @@ function settings() {
                     name: 'username',
                     message: 'Username:',
                     default: data.username,
-                    validate: value => {
+                    validate: (value) => {
                         if (value) {
                             return true;
                         } else {
@@ -912,7 +912,7 @@ function settings() {
                     type: 'password',
                     name: 'password',
                     message: 'Password:',
-                    validate: value => {
+                    validate: (value) => {
                         if (value) {
                             return true;
                         } else {
@@ -925,7 +925,7 @@ function settings() {
                     name: 'workDuration',
                     message: 'Work duration:',
                     default: data.workDuration,
-                    validate: value => {
+                    validate: (value) => {
                         if (value > 0 && value < 61) {
                             return true;
                         } else {
@@ -938,7 +938,7 @@ function settings() {
                     name: 'shortBreakDuration',
                     message: 'Short break duration:',
                     default: data.shortBreakDuration,
-                    validate: value => {
+                    validate: (value) => {
                         if (value > 0 && value < 61) {
                             return true;
                         } else {
@@ -951,7 +951,7 @@ function settings() {
                     name: 'longBreakDuration',
                     message: 'Long break duration:',
                     default: data.longBreakDuration,
-                    validate: value => {
+                    validate: (value) => {
                         if (value > 0 && value < 61) {
                             return true;
                         } else {
@@ -964,7 +964,7 @@ function settings() {
                     name: 'longBreakRatio',
                     message: 'Long break ratio:',
                     default: data.longBreakRatio,
-                    validate: value => {
+                    validate: (value) => {
                         if (value > 0 && value < 61) {
                             return true;
                         } else {
@@ -992,7 +992,7 @@ function settings() {
                 }
             ]);
         })
-        .then(data => {
+        .then((data) => {
             if (data.delete && data.deleteConfirmation) {
                 deleteUser(globalServerAddress, globalAccessToken)
                     .then(() => {
@@ -1000,7 +1000,7 @@ function settings() {
                         globalAccessToken = null;
                         globalServerAddress = null;
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         alert(error);
                     });
             } else {
@@ -1022,7 +1022,7 @@ function settings() {
                             ]
                         });
                     })
-                    .then(data => {
+                    .then((data) => {
                         switch (data.option) {
                             case 0:
                                 menu();
@@ -1032,12 +1032,12 @@ function settings() {
                                 break;
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
@@ -1050,7 +1050,7 @@ function logOut() {
             globalAccessToken = null;
             globalServerAddress = null;
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
 }
