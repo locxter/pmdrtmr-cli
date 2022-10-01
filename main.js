@@ -18,7 +18,7 @@ let countdownSeconds;
 let isPaused = false;
 
 // Function to sign up or log in a user
-function SignUpOrLogin() {
+function signUpOrLogIn() {
     console.clear();
     inquirer.prompt([
         {
@@ -1055,4 +1055,4 @@ function logOut() {
         });
 }
 
-SignUpOrLogin();
+signUpOrLogIn();
