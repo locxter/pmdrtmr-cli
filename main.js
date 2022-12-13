@@ -608,7 +608,7 @@ function runTimer(index) {
                     });
                 countdownInterval = setInterval(() => {
                     countdownMinutes = Math.floor(countdownTimeLeft / 60);
-                    countdownSeconds = Math.floor(countdownTimeLeft % 60);
+                    countdownSeconds = countdownTimeLeft % 60;
                     if (countdownMinutes < 10) {
                         countdownMinutes = '0' + countdownMinutes;
                     }
@@ -807,7 +807,7 @@ function toggleIsPaused() {
             });
         countdownInterval = setInterval(() => {
             countdownMinutes = Math.floor(countdownTimeLeft / 60);
-            countdownSeconds = Math.floor(countdownTimeLeft % 60);
+            countdownSeconds = countdownTimeLeft % 60;
             if (countdownMinutes < 10) {
                 countdownMinutes = '0' + countdownMinutes;
             }
