@@ -6,7 +6,7 @@ This repository includes the CLI frontend of my Pomodoro timer project pmdrtmr, 
 
 ## Dependencies
 
-I generally try to minimize dependencies, but I'm a one man crew and can therefore only support Linux Mint/Ubuntu as I'm running it myself. Anyway, you need to have the following packages installed for everything to work properly:
+I generally try to minimize dependencies, but I'm a one man crew and can therefore only support Debian-based Linux distributions as I'm running one myself. Anyway, you need to have the following packages installed for everything to work properly:
 
 - NodeJS as the development base. Install it via the [installation guide](https://github.com/nodesource/distributions#debinstall).
 
