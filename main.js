@@ -3,7 +3,18 @@
 import chalk from 'chalk';
 import figlet from 'figlet';
 import inquirer from 'inquirer';
-import { retrieveAccessToken, signUp, revokeAccessToken, getAllTimersOfUser, createTimer, deleteTimer, getUser, updateUser, getCaldavDescriptions, deleteUser } from './lib/api-controller.js';
+import {
+    retrieveAccessToken,
+    signUp,
+    revokeAccessToken,
+    getAllTimersOfUser,
+    createTimer,
+    deleteTimer,
+    getUser,
+    updateUser,
+    getCaldavDescriptions,
+    deleteUser,
+} from './lib/api-controller.js';
 
 // Variables for global stuff
 let globalAccessToken;
@@ -20,49 +31,50 @@ let isPaused = false;
 // Function to sign up or log in a user
 function signUpOrLogIn() {
     console.clear();
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'username',
-            message: 'Username:',
-            validate: (value) => {
-                if (value) {
-                    return true;
-                } else {
-                    return 'Enter a username';
-                }
-            }
-        },
-        {
-            type: 'password',
-            name: 'password',
-            message: 'Password:',
-            validate: (value) => {
-                if (value) {
-                    return true;
-                } else {
-                    return 'Enter a password';
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'serverAddress',
-            message: 'Server address:',
-            default: 'http://localhost:8080',
-            validate: (value) => {
-                if (value) {
-                    return true;
-                } else {
-                    return 'Enter a server address';
-                }
-            }
-        }
-    ])
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'username',
+                message: 'Username:',
+                validate: (value) => {
+                    if (value) {
+                        return true;
+                    } else {
+                        return 'Enter a username';
+                    }
+                },
+            },
+            {
+                type: 'password',
+                name: 'password',
+                message: 'Password:',
+                validate: (value) => {
+                    if (value) {
+                        return true;
+                    } else {
+                        return 'Enter a password';
+                    }
+                },
+            },
+            {
+                type: 'input',
+                name: 'serverAddress',
+                message: 'Server address:',
+                default: 'http://localhost:8080',
+                validate: (value) => {
+                    if (value) {
+                        return true;
+                    } else {
+                        return 'Enter a server address';
+                    }
+                },
+            },
+        ])
         .then((data) => {
             let user = {
                 username: data.username,
-                password: data.password
+                password: data.password,
             };
             let serverAddress = data.serverAddress;
             retrieveAccessToken(serverAddress, user)
@@ -95,41 +107,42 @@ function signUpOrLogIn() {
 // Function to display a menu for navigation
 function menu() {
     console.clear();
-    inquirer.prompt({
-        type: 'list',
-        name: 'option',
-        message: 'Choose an option:',
-        choices: [
-            {
-                name: 'Show timers',
-                value: 0
-            },
-            {
-                name: 'Add CalDAV task',
-                value: 1
-            },
-            {
-                name: 'Add task',
-                value: 2
-            },
-            {
-                name: 'Delete task',
-                value: 3
-            },
-            {
-                name: 'Start working',
-                value: 4
-            },
-            {
-                name: 'Settings',
-                value: 5
-            },
-            {
-                name: 'Log out',
-                value: 6
-            }
-        ]
-    })
+    inquirer
+        .prompt({
+            type: 'list',
+            name: 'option',
+            message: 'Choose an option:',
+            choices: [
+                {
+                    name: 'Show timers',
+                    value: 0,
+                },
+                {
+                    name: 'Add CalDAV task',
+                    value: 1,
+                },
+                {
+                    name: 'Add task',
+                    value: 2,
+                },
+                {
+                    name: 'Delete task',
+                    value: 3,
+                },
+                {
+                    name: 'Start working',
+                    value: 4,
+                },
+                {
+                    name: 'Settings',
+                    value: 5,
+                },
+                {
+                    name: 'Log out',
+                    value: 6,
+                },
+            ],
+        })
         .then((data) => {
             switch (data.option) {
                 case 0:
@@ -172,11 +185,10 @@ function showTimers() {
                 for (let i = 0; i < data.length; i++) {
                     let timer = data[i];
                     if (timer.isBreak) {
-                        console.log(chalk.bold((i + 1) + '. Break: ' + timer.description));
+                        console.log(chalk.bold(i + 1 + '. Break: ' + timer.description));
                     } else {
-                        console.log(chalk.bold((i + 1) + '. Work: ' + timer.description));
+                        console.log(chalk.bold(i + 1 + '. Work: ' + timer.description));
                     }
-
                 }
             }
             return inquirer.prompt({
@@ -186,17 +198,17 @@ function showTimers() {
                 choices: [
                     {
                         name: 'Menu',
-                        value: 0
+                        value: 0,
                     },
                     {
                         name: 'Settings',
-                        value: 1
+                        value: 1,
                     },
                     {
                         name: 'Log out',
-                        value: 2
-                    }
-                ]
+                        value: 2,
+                    },
+                ],
             });
         })
         .then((data) => {
@@ -224,25 +236,26 @@ function addCaldavTask() {
         .then((data) => {
             if (data.length < 1) {
                 console.log(chalk.bold('No CalDAV tasks found'));
-                inquirer.prompt({
-                    type: 'list',
-                    name: 'option',
-                    message: 'Choose an option:',
-                    choices: [
-                        {
-                            name: 'Menu',
-                            value: 0
-                        },
-                        {
-                            name: 'Settings',
-                            value: 1
-                        },
-                        {
-                            name: 'Log out',
-                            value: 2
-                        }
-                    ]
-                })
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'option',
+                        message: 'Choose an option:',
+                        choices: [
+                            {
+                                name: 'Menu',
+                                value: 0,
+                            },
+                            {
+                                name: 'Settings',
+                                value: 1,
+                            },
+                            {
+                                name: 'Log out',
+                                value: 2,
+                            },
+                        ],
+                    })
                     .then((data) => {
                         switch (data.option) {
                             case 0:
@@ -260,15 +273,16 @@ function addCaldavTask() {
                         console.error(error);
                     });
             } else {
-                inquirer.prompt({
-                    type: 'list',
-                    name: 'caldavTask',
-                    message: 'Choose a CalDAV task to add:',
-                    choices: data
-                })
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'caldavTask',
+                        message: 'Choose a CalDAV task to add:',
+                        choices: data,
+                    })
                     .then((data) => {
                         let timer = {
-                            description: data.caldavTask
+                            description: data.caldavTask,
                         };
                         return createTimer(globalServerAddress, globalAccessToken, timer);
                     })
@@ -280,21 +294,21 @@ function addCaldavTask() {
                             choices: [
                                 {
                                     name: 'Add another CalDAV task',
-                                    value: 0
+                                    value: 0,
                                 },
                                 {
                                     name: 'Menu',
-                                    value: 1
+                                    value: 1,
                                 },
                                 {
                                     name: 'Settings',
-                                    value: 2
+                                    value: 2,
                                 },
                                 {
                                     name: 'Log out',
-                                    value: 3
-                                }
-                            ]
+                                    value: 3,
+                                },
+                            ],
                         });
                     })
                     .then((data) => {
@@ -329,21 +343,22 @@ function addCaldavTask() {
 // Function to add a task to the timer list
 function addTask() {
     console.clear();
-    inquirer.prompt({
-        type: 'input',
-        name: 'task',
-        message: 'Task:',
-        validate: (value) => {
-            if (value) {
-                return true;
-            } else {
-                return 'Enter a task';
-            }
-        }
-    })
+    inquirer
+        .prompt({
+            type: 'input',
+            name: 'task',
+            message: 'Task:',
+            validate: (value) => {
+                if (value) {
+                    return true;
+                } else {
+                    return 'Enter a task';
+                }
+            },
+        })
         .then((data) => {
             let timer = {
-                description: data.task
+                description: data.task,
             };
             return createTimer(globalServerAddress, globalAccessToken, timer);
         })
@@ -355,21 +370,21 @@ function addTask() {
                 choices: [
                     {
                         name: 'Add another task',
-                        value: 0
+                        value: 0,
                     },
                     {
                         name: 'Menu',
-                        value: 1
+                        value: 1,
                     },
                     {
                         name: 'Settings',
-                        value: 2
+                        value: 2,
                     },
                     {
                         name: 'Log out',
-                        value: 3
-                    }
-                ]
+                        value: 3,
+                    },
+                ],
             });
         })
         .then((data) => {
@@ -403,31 +418,32 @@ function deleteTask() {
                 if (!timer.isBreak) {
                     tasksAvailable.push({
                         name: timer.description,
-                        value: timer.id
+                        value: timer.id,
                     });
                 }
             }
             if (tasksAvailable.length < 1) {
                 console.log(chalk.bold('No timers found'));
-                inquirer.prompt({
-                    type: 'list',
-                    name: 'option',
-                    message: 'Choose an option:',
-                    choices: [
-                        {
-                            name: 'Menu',
-                            value: 0
-                        },
-                        {
-                            name: 'Settings',
-                            value: 1
-                        },
-                        {
-                            name: 'Log out',
-                            value: 2
-                        }
-                    ]
-                })
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'option',
+                        message: 'Choose an option:',
+                        choices: [
+                            {
+                                name: 'Menu',
+                                value: 0,
+                            },
+                            {
+                                name: 'Settings',
+                                value: 1,
+                            },
+                            {
+                                name: 'Log out',
+                                value: 2,
+                            },
+                        ],
+                    })
                     .then((data) => {
                         switch (data.option) {
                             case 0:
@@ -445,12 +461,13 @@ function deleteTask() {
                         console.error(error);
                     });
             } else {
-                inquirer.prompt({
-                    type: 'list',
-                    name: 'taskToDelete',
-                    message: 'Choose a task to delete:',
-                    choices: tasksAvailable
-                })
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'taskToDelete',
+                        message: 'Choose a task to delete:',
+                        choices: tasksAvailable,
+                    })
                     .then((data) => {
                         return deleteTimer(globalServerAddress, globalAccessToken, data.taskToDelete);
                     })
@@ -462,21 +479,21 @@ function deleteTask() {
                             choices: [
                                 {
                                     name: 'Delete another task',
-                                    value: 0
+                                    value: 0,
                                 },
                                 {
                                     name: 'Menu',
-                                    value: 1
+                                    value: 1,
                                 },
                                 {
                                     name: 'Settings',
-                                    value: 2
+                                    value: 2,
                                 },
                                 {
                                     name: 'Log out',
-                                    value: 3
-                                }
-                            ]
+                                    value: 3,
+                                },
+                            ],
                         });
                     })
                     .then((data) => {
@@ -512,25 +529,26 @@ function runTimer(index) {
         .then((data) => {
             if (data.length < 2) {
                 console.log(chalk.bold('No timers found'));
-                inquirer.prompt({
-                    type: 'list',
-                    name: 'option',
-                    message: 'Choose an option:',
-                    choices: [
-                        {
-                            name: 'Menu',
-                            value: 0
-                        },
-                        {
-                            name: 'Settings',
-                            value: 1
-                        },
-                        {
-                            name: 'Log out',
-                            value: 2
-                        }
-                    ]
-                })
+                inquirer
+                    .prompt({
+                        type: 'list',
+                        name: 'option',
+                        message: 'Choose an option:',
+                        choices: [
+                            {
+                                name: 'Menu',
+                                value: 0,
+                            },
+                            {
+                                name: 'Settings',
+                                value: 1,
+                            },
+                            {
+                                name: 'Log out',
+                                value: 2,
+                            },
+                        ],
+                    })
                     .then((data) => {
                         switch (data.option) {
                             case 0:
@@ -550,7 +568,7 @@ function runTimer(index) {
             } else {
                 timers = data;
                 timer = timers[index];
-                countdownTimeLeft = (timer.duration * 60) - 2;
+                countdownTimeLeft = timer.duration * 60 - 2;
                 if (timer.isBreak) {
                     console.log(chalk.bold(figlet.textSync('Break', { font: 'Small' })));
                 } else {
@@ -568,41 +586,42 @@ function runTimer(index) {
                     choices: [
                         {
                             name: 'Pause',
-                            value: 0
+                            value: 0,
                         },
                         {
                             name: 'Stop working',
-                            value: 1
+                            value: 1,
                         },
                         {
                             name: 'Settings',
-                            value: 2
+                            value: 2,
                         },
                         {
                             name: 'Log out',
-                            value: 3
-                        }
-                    ]
+                            value: 3,
+                        },
+                    ],
                 });
-                countdownMenu.then((data) => {
-                    switch (data.option) {
-                        case 0:
-                            toggleIsPaused();
-                            break;
-                        case 1:
-                            clearInterval(countdownInterval);
-                            menu();
-                            break;
-                        case 2:
-                            clearInterval(countdownInterval);
-                            settings();
-                            break;
-                        case 3:
-                            clearInterval(countdownInterval);
-                            logOut();
-                            break;
-                    }
-                })
+                countdownMenu
+                    .then((data) => {
+                        switch (data.option) {
+                            case 0:
+                                toggleIsPaused();
+                                break;
+                            case 1:
+                                clearInterval(countdownInterval);
+                                menu();
+                                break;
+                            case 2:
+                                clearInterval(countdownInterval);
+                                settings();
+                                break;
+                            case 3:
+                                clearInterval(countdownInterval);
+                                logOut();
+                                break;
+                        }
+                    })
                     .catch((error) => {
                         console.error(error);
                     });
@@ -631,21 +650,21 @@ function runTimer(index) {
                         choices: [
                             {
                                 name: 'Pause',
-                                value: 0
+                                value: 0,
                             },
                             {
                                 name: 'Stop working',
-                                value: 1
+                                value: 1,
                             },
                             {
                                 name: 'Settings',
-                                value: 2
+                                value: 2,
                             },
                             {
                                 name: 'Log out',
-                                value: 3
-                            }
-                        ]
+                                value: 3,
+                            },
+                        ],
                     });
                     countdownMenu
                         .then((data) => {
@@ -706,29 +725,30 @@ function toggleIsPaused() {
         }
         console.log(chalk.bold(timer.description));
         console.log(chalk.bold(figlet.textSync(countdownMinutes + ':' + countdownSeconds)));
-        inquirer.prompt({
-            type: 'list',
-            name: 'option',
-            message: 'Choose an option:',
-            choices: [
-                {
-                    name: 'Resume',
-                    value: 0
-                },
-                {
-                    name: 'Stop working',
-                    value: 1
-                },
-                {
-                    name: 'Settings',
-                    value: 2
-                },
-                {
-                    name: 'Log out',
-                    value: 3
-                }
-            ]
-        })
+        inquirer
+            .prompt({
+                type: 'list',
+                name: 'option',
+                message: 'Choose an option:',
+                choices: [
+                    {
+                        name: 'Resume',
+                        value: 0,
+                    },
+                    {
+                        name: 'Stop working',
+                        value: 1,
+                    },
+                    {
+                        name: 'Settings',
+                        value: 2,
+                    },
+                    {
+                        name: 'Log out',
+                        value: 3,
+                    },
+                ],
+            })
             .then((data) => {
                 switch (data.option) {
                     case 0:
@@ -766,21 +786,21 @@ function toggleIsPaused() {
             choices: [
                 {
                     name: 'Pause',
-                    value: 0
+                    value: 0,
                 },
                 {
                     name: 'Stop working',
-                    value: 1
+                    value: 1,
                 },
                 {
                     name: 'Settings',
-                    value: 2
+                    value: 2,
                 },
                 {
                     name: 'Log out',
-                    value: 3
-                }
-            ]
+                    value: 3,
+                },
+            ],
         });
         countdownMenu
             .then((data) => {
@@ -830,21 +850,21 @@ function toggleIsPaused() {
                 choices: [
                     {
                         name: 'Pause',
-                        value: 0
+                        value: 0,
                     },
                     {
                         name: 'Stop working',
-                        value: 1
+                        value: 1,
                     },
                     {
                         name: 'Settings',
-                        value: 2
+                        value: 2,
                     },
                     {
                         name: 'Log out',
-                        value: 3
-                    }
-                ]
+                        value: 3,
+                    },
+                ],
             });
             countdownMenu
                 .then((data) => {
@@ -893,7 +913,13 @@ function settings() {
     console.clear();
     getUser(globalServerAddress, globalAccessToken)
         .then((data) => {
-            console.log(chalk.bold('Remember to always enter a password even though you may not want to change it, as the settings ') + chalk.bold.inverse('will not be saved') + chalk.bold(' otherwise!'));
+            console.log(
+                chalk.bold(
+                    'Remember to always enter a password even though you may not want to change it, as the settings '
+                ) +
+                    chalk.bold.inverse('will not be saved') +
+                    chalk.bold(' otherwise!')
+            );
             return inquirer.prompt([
                 {
                     type: 'input',
@@ -906,7 +932,7 @@ function settings() {
                         } else {
                             return 'Enter a username';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'password',
@@ -918,7 +944,7 @@ function settings() {
                         } else {
                             return 'Enter a password';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'number',
@@ -931,7 +957,7 @@ function settings() {
                         } else {
                             return 'Enter a work duration between 1 and 60';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'number',
@@ -944,7 +970,7 @@ function settings() {
                         } else {
                             return 'Enter a short break duration between 1 and 60';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'number',
@@ -957,7 +983,7 @@ function settings() {
                         } else {
                             return 'Enter a long break duration between 1 and 60';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'number',
@@ -970,26 +996,26 @@ function settings() {
                         } else {
                             return 'Enter a long break ratio between 1 and 10';
                         }
-                    }
+                    },
                 },
                 {
                     type: 'input',
                     name: 'caldavAddress',
                     message: 'CalDAV address:',
-                    default: data.caldavAddress
+                    default: data.caldavAddress,
                 },
                 {
                     type: 'confirm',
                     name: 'delete',
                     message: 'Do you want to delete this account?',
-                    default: false
+                    default: false,
                 },
                 {
                     type: 'confirm',
                     name: 'deleteConfirmation',
                     message: 'Do you really want to delete this account?',
-                    default: false
-                }
+                    default: false,
+                },
             ]);
         })
         .then((data) => {
@@ -1013,13 +1039,13 @@ function settings() {
                             choices: [
                                 {
                                     name: 'Menu',
-                                    value: 0
+                                    value: 0,
                                 },
                                 {
                                     name: 'Log out',
-                                    value: 1
-                                }
-                            ]
+                                    value: 1,
+                                },
+                            ],
                         });
                     })
                     .then((data) => {
